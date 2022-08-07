@@ -19,17 +19,21 @@
 
           <ComboboxOptions v-if="itemsFiltered.length > 0"
                            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            <ComboboxOption v-for="person in itemsFiltered" :key="person.route_id" :value="person" as="template"
+            <ComboboxOption v-for="item in itemsFiltered"
+                            :key="item.route_id"
+                            :value="item"
+                            as="template"
                             v-slot="{ active, selected }">
               <li :class="['relative cursor-default select-none py-2 pl-3 pr-9', active ? 'bg-sky-600 text-white' : 'text-gray-900']">
-            <span :class="['block truncate', selected && 'font-semibold']">
-              {{ person.route_label }}
-            </span>
+                <span :class="['block truncate', selected && 'font-semibold']">
+                  {{ item.route_label }}
+                </span>
 
                 <span v-if="selected"
                       :class="['absolute inset-y-0 right-0 flex items-center pr-4', active ? 'text-white' : 'text-sky-600']">
-              <CheckIcon class="h-5 w-5" aria-hidden="true"/>
-            </span>
+                  <CheckIcon class="h-5 w-5"
+                             aria-hidden="true"/>
+                </span>
               </li>
             </ComboboxOption>
           </ComboboxOptions>
@@ -42,7 +46,7 @@
 <script setup>
 import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions} from '@headlessui/vue'
-import {computed, defineProps, ref, toRefs, watch} from "vue";
+import {computed, defineProps, ref, toRefs} from "vue";
 
 const itemQuery = ref('')
 const props = defineProps({
