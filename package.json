@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "generate:api": "openapi-generator-cli generate -i https://svc.metrotransit.org/swagger/docs/v2/nextrip -g typescript-axios -o src/services/generated-nextrip-api --additional-properties=ngVersion=6.1.7,npmName=restClient,supportsES6=true,npmVersion=6.9.0,withInterfaces=true"
+    "generate:api": "openapi-generator-cli generate -i https://svc.metrotransit.org/swagger/docs/v2/nextrip -g typescript-axios -o src/services/generated-nextrip-api --additional-properties=ngVersion=6.1.7,npmName=restClient,supportsES6=true,npmVersion=6.9.0,withInterfaces=true",
+    "e2e":"cypress run",
+    "e2e:dev":"cypress open"
   },
   "dependencies": {
     "@fontsource/inter": "^4.5.11",

@@ -31,8 +31,11 @@ This Metro Transit NexTrip exercise recreates the NexTrip web application in Vue
 
 ## Usage
 
-| Command                   | Description                                                                  |
-|---------------------------|------------------------------------------------------------------------------|
-| `npm run dev`             | Run the frontend on http://localhost:5173.                                   |
-| `npm run build`           | Builds the production frontend application.                                  |
-| `npm run e2e`             | Runs end to end tests.                                                       |
+| Command           | Description                                   |
+|-------------------|-----------------------------------------------|
+| `npm run dev`     | Run the frontend on http://localhost:5173.    |
+| `npm run build`   | Builds the production frontend application.   |
+| `npm run e2e`     | Runs end to end tests.                        |
+| `npm run e2e:dev` | Runs end to end tests in Cypress runner.      |
+| `generate:api`    | Generates the MetroTransit API using OpenAPI. |
+
