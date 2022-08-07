@@ -46,9 +46,11 @@
 <script setup>
 import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions} from '@headlessui/vue'
-import {computed, defineProps, ref, toRefs} from "vue";
+import {computed, defineEmits, defineProps, ref, toRefs, watch} from "vue";
 
-const itemQuery = ref('')
+const itemQuery = ref('');
+const itemSelected = ref();
+
 const props = defineProps({
   label: {
     required: true,
@@ -59,14 +61,15 @@ const props = defineProps({
     default: [],
     type: Array
   },
-
-  itemSelected: {
-    default: undefined,
-    type: Object
-  }
 });
 
-const { items } = toRefs(props);
+const {items} = toRefs(props);
+
+const emits = defineEmits(['onItemSelected']);
+
+watch(itemSelected, (value) => {
+  emits('onItemSelected', value);
+})
 
 const itemsFiltered = computed(() => {
   if (itemQuery.value === '') {

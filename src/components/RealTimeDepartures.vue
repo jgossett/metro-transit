@@ -13,7 +13,7 @@
       <item-selector-component
           label="Select Route"
           :items="routes"
-          :item-selected="routeSelected">
+          @on-item-selected="onRouteSelected">
       </item-selector-component>
     </main>
   </div>
@@ -21,18 +21,18 @@
 
 <script setup>
 
-import {onMounted, ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import {metroTransitService} from '@/services/metroTransitService'
 import ItemSelectorComponent from "@/components/ItemSelectorComponent.vue";
 
 const routes = ref([]);
-const routeSelected = ref();
 
 onMounted(async () => {
   routes.value = await metroTransitService.findAllRoutes();
 });
 
-watch(routeSelected, (routeSelected) => {
-  console.log(routeSelected);
-});
+const onRouteSelected = (route) => {
+  console.log('route was selected', route);
+};
+
 </script>
