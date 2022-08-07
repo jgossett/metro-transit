@@ -70,7 +70,7 @@
                   </thead>
 
                   <tbody class="divide-y divide-gray-200 bg-white">
-                  <tr v-for="departure in departuresRef"
+                  <tr v-for="departure in departuresLimited"
                       :key="departure.departure_time">
 
                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-bold">
@@ -88,9 +88,22 @@
 
                   <!-- expander -->
                   <tr class="border-t border-gray-200">
-                    <th colspan="5" scope="colgroup" class="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6">
-                      <a @click.prevent="onExpand()">
-                        Departures
+                    <th colspan="5"
+                        scope="colgroup"
+                        class="bg-gray-50 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6">
+                      <a @click.prevent="onExpand()"
+                         class="block hover:bg-gray-50">
+
+                        <div class="py-2 flex items-center">
+                          <div class="flex-shrink-0">
+                            <ChevronUpIcon v-if="collapsed" class="h-5 w-5 text-gray-400" aria-hidden="true"/>
+                            <ChevronDownIcon v-else class="h-5 w-5 text-gray-400" aria-hidden="true"/>
+                          </div>
+
+                          <div>
+                            Departures
+                          </div>
+                        </div>
                       </a>
                     </th>
                   </tr>
@@ -108,12 +121,13 @@
 </template>
 
 <script setup lang="ts">
-
 import ItemSelectorComponent from '@/components/OptionSelectorComponent.vue';
 import { metroTransitService } from '@/services/metroTransitService';
-import { onMounted, ref } from 'vue';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/solid'
+import { computed, onMounted, ref } from 'vue';
 import { Direction, Place, Route } from '../services/generated-nextrip-api';
 
+const COLLAPSED_LIMIT = 3;
 
 const routeOptions = ref([]);
 const routeSelected = ref();
@@ -121,8 +135,9 @@ const directionOptions = ref([]);
 const directionSelected = ref();
 const placesOptions = ref([]);
 const placeSelected = ref();
-const stop = ref()
-const departuresRef = ref([])
+const stop = ref();
+let departuresRef = ref([]);
+const collapsed = ref(true);
 
 onMounted(async () => {
   const routes = await metroTransitService.findAllRoutes();
@@ -175,7 +190,12 @@ const onPlaceSelected = async (place: Place) => {
   stop.value = stops[0];
 }
 
+const departuresLimited = computed(() => {
+  const isCollapsed = collapsed.value;
+  return isCollapsed ? departuresRef.value.slice(0, COLLAPSED_LIMIT) : departuresRef.value;
+})
+
 const onExpand = () => {
-  console.log("expand")
+  collapsed.value = !collapsed.value;
 }
 </script>
