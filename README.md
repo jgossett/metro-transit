@@ -17,7 +17,7 @@ This Metro Transit NexTrip exercise recreates the NexTrip web application in Vue
 ## Setup
 > **Prerequisite:** MacOS with XCode. 
 
-1. Clone this repository with **Git**. Open **Terminal** and run.
+1. **Clone this repository with Git**. Open **Terminal** and run.
    ``` shell
    $ git clone git@github.com:jgossett/metro-transit.git
    ```
