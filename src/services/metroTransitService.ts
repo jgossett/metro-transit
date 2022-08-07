@@ -16,8 +16,13 @@ export const metroTransitService = {
         return response.data;
     },
 
-    findStopsByDirection: async (routeId: String, directionId: String) => {
+    findStopsByRouteAndDirection: async (routeId: String, directionId: String) => {
         const response = await nexTripApi.nextripv2StopsRouteIdDirectionIdGet(routeId, directionId);
+        return response.data;
+    },
+
+    findDepartureRouteAndDirectionAndPlace: async (routeId: String, directionId: String, placeCode: String) => {
+        const response = await nexTripApi.nextripv2RouteIdDirectionIdPlaceCodeGet(routeId, directionId, placeCode);
         return response.data;
     },
 

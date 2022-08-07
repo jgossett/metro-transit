@@ -24,12 +24,12 @@
           @option-selected="onDirectionSelected">
       </item-selector-component>
 
-      <!-- stop -->
+      <!-- places -->
       <item-selector-component
           v-if="directionSelected != null"
           label="Select Stop"
-          :options="stopOptions"
-          @option-selected="onStopSelected">
+          :options="placesOptions"
+          @option-selected="onPlaceSelected">
       </item-selector-component>
     </main>
   </div>
@@ -40,15 +40,15 @@
 import ItemSelectorComponent from '@/components/OptionSelectorComponent.vue';
 import { metroTransitService } from '@/services/metroTransitService';
 import { onMounted, ref } from 'vue';
-import { Direction, Route, Stop } from '../services/generated-nextrip-api';
+import { Direction, Place, Route, Stop } from '../services/generated-nextrip-api';
 
 
 const routeOptions = ref([]);
 const routeSelected = ref();
 const directionOptions = ref([]);
 const directionSelected = ref();
-const stopOptions = ref([]);
-const stopSelected = ref();
+const placesOptions = ref([]);
+const placeSelected = ref();
 
 onMounted(async () => {
   const routes = await metroTransitService.findAllRoutes();
@@ -63,6 +63,9 @@ onMounted(async () => {
 
 const onRouteSelected = async (route: Route) => {
   routeSelected.value = route;
+  directionSelected.value = undefined;
+  placeSelected.value = undefined;
+
   const directions = await metroTransitService.findDirectionsByRoute(route.route_id);
   directionOptions.value = directions.map((direction: Direction) => {
     return {
@@ -75,19 +78,25 @@ const onRouteSelected = async (route: Route) => {
 
 const onDirectionSelected = async (direction: Direction) => {
   directionSelected.value = direction;
-  const stops = await metroTransitService.findStopsByDirection(routeSelected.value.route_id, direction.direction_id);
-  stopOptions.value = stops.map((stop: Stop) => {
+  placeSelected.value = undefined;
+  const places = await metroTransitService.findStopsByRouteAndDirection(routeSelected.value.route_id, direction.direction_id);
+  placesOptions.value = places.map((place: Place) => {
     return {
-      display: stop.description,
-      id: stop.stop_id,
-      value: stop,
+      display: place.description,
+      id: place.place_code,
+      value: place,
     }
   });
 }
 
-const onStopSelected = async (stop: Stop) => {
-  stopSelected.value = stop;
-  // const stops = await metroTransitService.findStopsByRoute(direction.direction_id);
+const onPlaceSelected = async (place: Place) => {
+  placeSelected.value = place;
+  const departures = await metroTransitService.findDepartureRouteAndDirectionAndPlace(
+      routeSelected.value.route_id,
+      directionSelected.value.direction_id,
+      place.place_code
+  );
+  debugger;
   // stopOptions.value = stops.map((stop: Stop) => {
   //   return {
   //     display: stop.description,
