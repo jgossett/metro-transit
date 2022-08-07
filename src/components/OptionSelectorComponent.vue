@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-    <div class="px-4 py-8 sm:px-0">
+    <div class="px-4 py-2 sm:px-0">
       <Combobox as="div"
                 v-model="optionSelected">
 

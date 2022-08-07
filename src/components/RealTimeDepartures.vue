@@ -1,7 +1,7 @@
 <template>
   <div class="py-10">
     <!-- title -->
-    <header>
+    <header class="pb-2">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold leading-tight text-gray-800">NexTrip</h1>
       </div>
@@ -16,11 +16,20 @@
           @option-selected="onRouteSelected">
       </item-selector-component>
 
-      <!-- direcion -->
+      <!-- direction -->
       <item-selector-component
+          v-if="routeSelected != null"
           label="Select Direction"
           :options="directionOptions"
           @option-selected="onDirectionSelected">
+      </item-selector-component>
+
+      <!-- stop -->
+      <item-selector-component
+          v-if="directionSelected != null"
+          label="Select Stop"
+          :options="stopOptions"
+          @option-selected="onStopSelected">
       </item-selector-component>
     </main>
   </div>
@@ -31,11 +40,15 @@
 import ItemSelectorComponent from '@/components/OptionSelectorComponent.vue';
 import { metroTransitService } from '@/services/metroTransitService';
 import { onMounted, ref } from 'vue';
-import { Direction, Route } from '../services/generated-nextrip-api';
+import { Direction, Route, Stop } from '../services/generated-nextrip-api';
 
 
 const routeOptions = ref([]);
+const routeSelected = ref();
 const directionOptions = ref([]);
+const directionSelected = ref();
+const stopOptions = ref([]);
+const stopSelected = ref();
 
 onMounted(async () => {
   const routes = await metroTransitService.findAllRoutes();
@@ -49,7 +62,8 @@ onMounted(async () => {
 });
 
 const onRouteSelected = async (route: Route) => {
-  const directions = await metroTransitService.findDirectionByRoute(route.route_id);
+  routeSelected.value = route;
+  const directions = await metroTransitService.findDirectionsByRoute(route.route_id);
   directionOptions.value = directions.map((direction: Direction) => {
     return {
       display: direction.direction_name,
@@ -60,6 +74,26 @@ const onRouteSelected = async (route: Route) => {
 };
 
 const onDirectionSelected = async (direction: Direction) => {
-  console.log('direction selected', direction)
+  directionSelected.value = direction;
+  const stops = await metroTransitService.findStopsByDirection(routeSelected.value.route_id, direction.direction_id);
+  stopOptions.value = stops.map((stop: Stop) => {
+    return {
+      display: stop.description,
+      id: stop.stop_id,
+      value: stop,
+    }
+  });
+}
+
+const onStopSelected = async (stop: Stop) => {
+  stopSelected.value = stop;
+  // const stops = await metroTransitService.findStopsByRoute(direction.direction_id);
+  // stopOptions.value = stops.map((stop: Stop) => {
+  //   return {
+  //     display: stop.description,
+  //     id: stop.stop_id,
+  //     value: stop,
+  //   }
+  // });
 }
 </script>
