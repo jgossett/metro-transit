@@ -76,7 +76,7 @@ watch(optionSelected, (option) => {
 
 const optionsFiltered = computed(() => {
   if (optionDisplayQuery.value === '') {
-    return options;
+    return options.value;
   }
 
   return options.value.filter((item) => {

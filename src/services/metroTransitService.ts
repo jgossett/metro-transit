@@ -7,7 +7,12 @@ const nexTripApi = new NexTripApi(undefined, BASE_URL, axiosInstance);
 
 export const metroTransitService = {
     findAllRoutes: async () => {
-        const response = await nexTripApi.nextripv2RoutesGet()
-        return response.data
+        const response = await nexTripApi.nextripv2RoutesGet();
+        return response.data;
+    },
+
+    findDirectionByRoute: async (routeId: String) => {
+        const response = await nexTripApi.nextripv2DirectionsRouteIdGet(routeId);
+        return response.data;
     },
 }
