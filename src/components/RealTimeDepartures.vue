@@ -13,7 +13,7 @@
       <item-selector-component
           label="Select Route"
           :items="routes"
-          @on-item-selected="onRouteSelected">
+          @item-selected="onRouteSelected">
       </item-selector-component>
     </main>
   </div>

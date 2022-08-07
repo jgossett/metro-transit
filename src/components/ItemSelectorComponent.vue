@@ -48,6 +48,8 @@ import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions} from '@headlessui/vue'
 import {computed, defineEmits, defineProps, ref, toRefs, watch} from "vue";
 
+const ITEM_SELECTED_EVENT = "itemSelected";
+
 const itemQuery = ref('');
 const itemSelected = ref();
 
@@ -65,10 +67,10 @@ const props = defineProps({
 
 const {items} = toRefs(props);
 
-const emits = defineEmits(['onItemSelected']);
+const emits = defineEmits(['itemSelected']);
 
 watch(itemSelected, (value) => {
-  emits('onItemSelected', value);
+  emits('itemSelected', value);
 })
 
 const itemsFiltered = computed(() => {
