@@ -43,25 +43,28 @@
   </div>
 </template>
 
-<script setup>
-import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
-import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions} from '@headlessui/vue'
-import {computed, defineEmits, defineProps, ref, toRefs, watch} from "vue";
+<script setup lang="ts">
+import {
+  Combobox,
+  ComboboxButton,
+  ComboboxInput,
+  ComboboxLabel,
+  ComboboxOption,
+  ComboboxOptions,
+} from '@headlessui/vue'
+import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
+import { computed, defineEmits, defineProps, ref, toRefs, watch } from 'vue';
+import type { Option } from './Option';
 
 const optionDisplayQuery = ref('');
 const optionSelected = ref();
 
-const props = defineProps({
-  label: {
-    required: true,
-    type: String
-  },
+interface Props {
+  label: string,
+  options: Option<object>[]
+}
 
-  options: {
-    default: [],
-    type: Array
-  },
-});
+const props = defineProps<Props>();
 
 const { options } = toRefs(props);
 

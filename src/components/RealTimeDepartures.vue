@@ -19,28 +19,27 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import {onMounted, ref} from 'vue'
-import {metroTransitService} from '@/services/metroTransitService'
-import ItemSelectorComponent from "@/components/ItemSelectorComponent.vue";
+import ItemSelectorComponent from '@/components/OptionSelectorComponent.vue';
+import { metroTransitService } from '@/services/metroTransitService';
+import { onMounted, ref } from 'vue';
+import type { Route } from './Route'
 
 const routeOptions = ref([]);
 
 onMounted(async () => {
   const routesRaw = await metroTransitService.findAllRoutes();
-  routeOptions.value = routesRaw.map(toRouteOption);
+  routeOptions.value = routesRaw.map((route: Route) => {
+    return {
+      display: route.route_label,
+      id: route.route_id,
+      value: route,
+    }
+  });
 });
 
-const onRouteSelected = (route) => {
+const onRouteSelected = (route: Route) => {
 
 };
-
-const toRouteOption = _ => {
-  return {
-    display: _.route_label,
-    id: _.route_id,
-    value: _
-  }
-}
 </script>
