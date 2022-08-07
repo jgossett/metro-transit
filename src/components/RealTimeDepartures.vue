@@ -9,68 +9,30 @@
 
     <!-- body -->
     <main>
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="px-4 py-8 sm:px-0">
-          <Combobox as="div" v-model="selectedPerson">
-            <ComboboxLabel class="block text-sm font-medium text-gray-700">Select route</ComboboxLabel>
-
-            <div class="relative mt-1">
-              <ComboboxInput
-                  class="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                  @change="query = $event.target.value" :display-value="(person) => person?.route_label"/>
-              <ComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
-              </ComboboxButton>
-
-              <ComboboxOptions v-if="filteredPeople.length > 0"
-                               class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                <ComboboxOption v-for="person in filteredPeople" :key="person.route_id" :value="person" as="template"
-                                v-slot="{ active, selected }">
-                  <li :class="['relative cursor-default select-none py-2 pl-3 pr-9', active ? 'bg-sky-600 text-white' : 'text-gray-900']">
-            <span :class="['block truncate', selected && 'font-semibold']">
-              {{ person.route_label }}
-            </span>
-
-                    <span v-if="selected"
-                          :class="['absolute inset-y-0 right-0 flex items-center pr-4', active ? 'text-white' : 'text-sky-600']">
-              <CheckIcon class="h-5 w-5" aria-hidden="true"/>
-            </span>
-                  </li>
-                </ComboboxOption>
-              </ComboboxOptions>
-            </div>
-          </Combobox>
-        </div>
-      </div>
+      <!-- route -->
+      <item-selector-component
+          label="Select Route"
+          :items="routes"
+          :item-selected="routeSelected">
+      </item-selector-component>
     </main>
   </div>
 </template>
 
 <script setup>
-import {NexTripApi} from '@/generated-sources/openapi/index.ts'
-import axios from 'axios';
-import {computed, onMounted, ref} from 'vue'
-import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
-import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions,} from '@headlessui/vue'
 
-const axiosInstance = axios.create();
-const nexTripApi = new NexTripApi(undefined, "https://svc.metrotransit.org", axiosInstance)
+import {onMounted, ref, watch} from 'vue'
+import {metroTransitService} from '@/services/metroTransitService'
+import ItemSelectorComponent from "@/components/ItemSelectorComponent.vue";
 
-let routes = []
+const routes = ref([]);
+const routeSelected = ref();
 
 onMounted(async () => {
-  const response = await nexTripApi.nextripv2RoutesGet()
-  routes = response.data
+  routes.value = await metroTransitService.findAllRoutes();
+});
 
-})
-
-const query = ref('')
-const selectedPerson = ref()
-const filteredPeople = computed(() =>
-    query.value === ''
-        ? routes
-        : routes.filter((person) => {
-          return person.route_label.toLowerCase().includes(query.value.toLowerCase())
-        })
-)
+watch(routeSelected, (routeSelected) => {
+  console.log(routeSelected);
+});
 </script>
