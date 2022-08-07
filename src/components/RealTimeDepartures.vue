@@ -12,8 +12,8 @@
       <!-- route -->
       <item-selector-component
           label="Select Route"
-          :items="routes"
-          @item-selected="onRouteSelected">
+          :options="routeOptions"
+          @option-selected="onRouteSelected">
       </item-selector-component>
     </main>
   </div>
@@ -25,14 +25,22 @@ import {onMounted, ref} from 'vue'
 import {metroTransitService} from '@/services/metroTransitService'
 import ItemSelectorComponent from "@/components/ItemSelectorComponent.vue";
 
-const routes = ref([]);
+const routeOptions = ref([]);
 
 onMounted(async () => {
-  routes.value = await metroTransitService.findAllRoutes();
+  const routesRaw = await metroTransitService.findAllRoutes();
+  routeOptions.value = routesRaw.map(toRouteOption);
 });
 
 const onRouteSelected = (route) => {
-  console.log('route was selected', route);
+
 };
 
+const toRouteOption = _ => {
+  return {
+    display: _.route_label,
+    id: _.route_id,
+    value: _
+  }
+}
 </script>
