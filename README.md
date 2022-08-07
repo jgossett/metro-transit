@@ -19,14 +19,14 @@ This Metro Transit NexTrip exercise recreates the NexTrip web application in Vue
 
 1. Clone this repository with **Git**. Open **Terminal** and run.
    ``` shell
-   git clone git@github.com:jgossett/metro-transit.git
+   $ git clone git@github.com:jgossett/metro-transit.git
    ```
 
 2. **Download all NPM dependencies.** Run:
 
    ``` shell
-   cd metro-transit
-   npm install
+   $ cd metro-transit
+   $ npm install
    ```
 
 ## Usage
