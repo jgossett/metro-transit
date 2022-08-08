@@ -1,5 +1,24 @@
 import { createApp } from 'vue'
-import './index.css'
+import { createRouter, createWebHashHistory } from 'vue-router';
 import App from './App.vue'
+import './index.css'
 
-createApp(App).mount('#app')
+const routes = [
+    {
+        path: '/',
+        component: () => import("@/components/RealTimeDepartures.vue")
+    },
+]
+
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+})
+
+const app = createApp(App);
+app.use(router)
+
+
+app.mount('#app');
+
+

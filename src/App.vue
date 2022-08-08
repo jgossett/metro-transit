@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full">
     <header-component></header-component>
-    <real-time-departures></real-time-departures>
+    <router-view></router-view>
   </div>
 </template>
 
